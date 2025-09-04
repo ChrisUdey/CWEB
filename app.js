@@ -6,6 +6,7 @@ var logger = require('morgan');
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
+const exampleRouter = require('./routes/examples');
 
 var app = express();
 
@@ -20,8 +21,10 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use('/bw', express.static(path.join(__dirname, 'node_modules/bootswatch/dist')));
 
+//This is like a switch statement that pivots on the url
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
+app.use('/examples', exampleRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
