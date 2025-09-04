@@ -1,12 +1,40 @@
 <h1>{{title}}</h1>
 <p>Welcome {{myPosition}}: You are {{myName}}</p>
 
-<div>
+<div class="card p-3">
     <h2> List of ints: </h2>
     <ul>
         {{#each numbers}}
-                <li>{{this}}</li>
+                <li class="{{../cssClass}}">{{this}}</li>
             {{/each}}
     </ul>
+
+</div>
+
+<div class="card p-3">
+    <h2>Display Random Number</h2>
+    {{randomNum}} is
+    {{#if randomIsEven}}
+        <i class="text-success">EVEN</i>
+    {{else}}
+        <i class="text-danger">ODD</i>
+    {{/if}}
+</div>
+
+<!--//TODO make an array of 10 random numbers (each different)-->
+<!--//DISPLAY each number in a table cell (td) in one table row-->
+<!--//Make the table cell the same width as the random number-->
+
+<div>
+    <table>
+        <tbody>
+        <tr>
+
+                {{#each randomNumbers}}
+                    <td style="width: {{this}}em">{{this}} </td>
+                    {{/each}}
+        </tr>
+        </tbody>
+    </table>
 
 </div>

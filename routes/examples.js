@@ -32,12 +32,24 @@ router.get('/', function(req, res)
 router.get('/simple-code', (req, res) =>
 {
     // do logic before the res.render because hbs files are not super smart
-    const numbs = [6,3,9,1,0,45];
+    const numbers = [6,3,9,1,0,45];
+    const randomNum = Math.floor(Math.random() * 10);
+    const randomIsEven = randomNum % 2 === 0 // Comparison operator returns boolean - save boolean to a variable;
+    const randomNumbers = [];
+    for(let i = 0; i < 10; i++) {
+        randomNumbers[i] = Math.floor(Math.random() * 10);
+    }
+
     res.render('simple-code', {
         title:"Welcome Page!",
         myPosition: "Student",
         myName: "Christopher U",
-        numbers: numbs
+        numbers,
+        cssClass: "bg-danger",
+        randomNum,
+        randomIsEven,
+        randomNumbers
+
     });
 })
 
