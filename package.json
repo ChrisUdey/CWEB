@@ -1,0 +1,21 @@
+{
+  "name": "lo1serveronly",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "start": "node-dev ./bin/www"
+  },
+  "dependencies": {
+    "bootstrap": "^5.3.8",
+    "bootswatch": "^5.3.7",
+    "cookie-parser": "~1.4.4",
+    "debug": "~2.6.9",
+    "express": "^4.21.2",
+    "hbs": "^4.2.0",
+    "http-errors": "~1.6.3",
+    "morgan": "^1.10.1"
+  },
+  "devDependencies": {
+    "node-dev": "^8.0.0"
+  }
+}
