@@ -1,0 +1,42 @@
+<form action="/examples/form?bob=72&steven=green&qmail={{submittedEmail}}" method="post">
+    <h1>{{title}}</h1>
+    <div> <!-- Email INPUT -->
+        <label for="emailid">Email:</label>
+        <input type="email" id="emailid" name="email" class="form-control"
+               placeholder="Enter your email address" value="{{submittedEmail}}"
+               required />
+    </div>
+    <div> <!-- PASSWORD INPUT -->
+        <label for="passwordid">Password:</label>
+        <input type="password" id="passwordid" name="pwd" class="form-control"
+               placeholder="Enter your password" value="{{submittedPassword}}"
+               required />
+    </div>
+    <div>
+        <div class="form-check">
+            <input class="form-check-input" type="checkbox"
+                   id="agreedid" value="yes" name="agreed"
+                   {{#if submittedAgreed}}
+                       checked
+                       {{/if}}
+                    >
+            <label class="form-check-label" for="agreedid">
+                Agree to terms of services
+            </label>
+        </div>
+    </div>
+    <button type="submit" class="btn-primary">Submit</button>
+
+</form>
+
+{{#if isSubmitted}}
+    <div class="card p-2">
+        <h2>Submitted Values:</h2>
+        <p>Password: {{submittedPassword}}</p>
+        <p>Email: {{submittedEmail}}</p>
+        <p>Agreed: {{submittedAgreed}}</p>
+        <!-- TODO display the email from the query string -->
+        <p>Query email: {{QueryMail}}</p>
+
+    </div>
+{{/if}}

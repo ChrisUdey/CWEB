@@ -53,6 +53,36 @@ router.get('/simple-code', (req, res) =>
     });
 })
 
+/**
+ * This is the get handler for http://localhost:3000/examples/form
+ */
+router.get('/form', (req, res) => {
+//GENERAL RULE: req.query is usually handed in the get -router.get
+    res.render('form-example',{
+        title:"GET - form example",
+        submittedPassword: req.query.pwd,
+        submittedEmail: req.query.email,
+        submittedAgreed: req.query.agreed,
+    });
+
+})
+
+/**
+ * This is the POST handler for http://localhost:3000/examples/form
+ */
+router.post('/form', (req, res) => {
+//GENERAL RULE: req.body is usually handed in the post - router.post
+
+    res.render('form-example',{
+        title:'POST - form example',
+        isSubmitted: true, //post handler means form was submitted
+        submittedPassword: req.body.pwd,
+        submittedEmail: req.body.email,
+        submittedAgreed: req.body.agreed,
+        QueryMail: req.query.qmail,
+    });
+
+})
 
 // need to export in order for app.js to "read" this file
 module.exports = router;
