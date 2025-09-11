@@ -1,0 +1,22 @@
+<form action="/examples/upload" method="post"
+    enctype="multipart/form-data"> <!-- NEED enctype to upload file -->
+
+    <h1>{{title}}</h1>
+    <div>
+        <label for="file1id">File 1:</label>
+        <input type="file" class="form-control"
+        id="file1id" name="filetag1" multiple />
+    </div>
+    <div>
+        <label for="file2id">File 2:</label>
+        <input type="file" class="form-control"
+        id="file2id" name="filetag2" multiple />
+    </div>
+    <button class="btn-primary" type="submit">UPLOAD</button>
+</form>
+{{#if isSubmitted}}
+    <div class="card p-2">
+        <h2>Display some file info</h2>
+        <p>Original Name of second file: || {{OgName}} ||</p>
+    </div>
+{{/if}}

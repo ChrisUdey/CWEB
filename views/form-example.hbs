@@ -39,4 +39,12 @@
         <p>Query email: {{QueryMail}}</p>
 
     </div>
+    <div class="card p-2">
+        <h2>Loop through object</h2>
+        {{#each body}}
+            <!-- KEYWORD THIS will get the values of the object's properties -->
+            <!-- KEYWORD @key will get the names of the object's properties -->
+            <p>{{@key}}: {{this}}</p>
+            {{/each}}
+    </div>
 {{/if}}

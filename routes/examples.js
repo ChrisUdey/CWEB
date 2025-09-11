@@ -6,6 +6,11 @@
 const express = require('express');
 const router = express.Router();
 
+//use the multer package to make file upload handling "easier" for developers
+const multer = require("multer");
+//override the default temp upload location
+const uploadFuncs = multer({ dest: "public/temp-uploads" });
+
 router.get('/', function(req, res)
 {
     res.send(`
@@ -77,12 +82,43 @@ router.post('/form', (req, res) => {
         title:'POST - form example',
         isSubmitted: true, //post handler means form was submitted
         submittedPassword: req.body.pwd,
-        submittedEmail: req.body.email,
+        submittedEmail: req.body["email"],
         submittedAgreed: req.body.agreed,
         QueryMail: req.query.qmail,
+        //The more popular way is to pass the entire req.body object
+        body : req.body,
+
     });
 
 })
+
+
+//TODO make 2 routes handlers for http://localhost:3000/examples/upload - display form and title
+
+router.get('/upload', (req, res) => {
+    res.render('upload-files',{
+        title: 'GET - UPLOAD FILE',
+
+    });
+})
+
+router.post('/upload',
+    //multer middleware get req,res, and next and modifies the req object
+    uploadFuncs.fields([{name: "filetag1",maxCount:3},{name: "filetag2",maxCount:3}])
+
+    ,(req, res) => {
+    // At this point multer (uploadFuncs.fields()) has modified the request object
+    console.log(req.files) // output the structure of the files object
+
+    //TODO upload at least 2 files in filetag1 then display the original name of the file
+    res.render('upload-files',{
+        title: 'POST - Upload example',
+        isSubmitted: true,
+        OgName: req.files.filetag1?.[1].originalname,
+    });
+})
+
+
 
 // need to export in order for app.js to "read" this file
 module.exports = router;
