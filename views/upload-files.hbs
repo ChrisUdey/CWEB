@@ -17,6 +17,24 @@
 {{#if isSubmitted}}
     <div class="card p-2">
         <h2>Display some file info</h2>
-        <p>Original Name of second file: || {{OgName}} ||</p>
+        <p>Original Name of second file:  {{OgName}} </p>
+    </div>
+    <div class="cards p-2">
+        <!-- fun exercise -->
+        <h1>Loop through file info object of first upload</h1>
+        {{#each firstFileInfo}}
+            <p>{{@key}}: {{this}}</p>
+        {{/each}}
+        <img src="/images/{{firstFileInfo.filename}}"/>
+    </div>
+    <div class="cards p-2">
+        <!-- fun excercise display the images that just got uploaded -->
+        <h1>Updated Images</h1>
+        {{#each}}
+            {{#each}}
+                <img src="/images/{{}}" />
+                {{/each}}
+            {{/each}}
+
     </div>
 {{/if}}

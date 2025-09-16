@@ -9,7 +9,39 @@ const router = express.Router();
 //use the multer package to make file upload handling "easier" for developers
 const multer = require("multer");
 //override the default temp upload location
-const uploadFuncs = multer({ dest: "public/temp-uploads" });
+const uploadFuncs = multer({
+    dest: "public/temp-uploads",
+    fileFilter: function (req, file, callback) {
+        //Note: This code is called by the uploadFuncs.fields() method- !!!BEFORE "our code"
+        //Check mimetype for a quick way to check if file is an image
+        if(file.mimetype.startsWith("image/"))
+        {
+            //Allow image so call the callback function
+            callback(null, true); //null means no error and true means allowed
+        } else
+        {
+            //file is not an image - so NOT allowed - return callback with an error to BREAK the workflow
+            return callback(new Error("Only images are allowed"), false);
+        }
+    },
+    //2 MegaByes is 2095752 easier for dev to do a calculation
+    limits: {fileSize: 1024* 1024 * 2} //Max of 2MB file size
+
+});
+
+const fs = require("fs");
+
+
+function moveFile(tempFileInfo, newPath)
+{
+    newPath += tempFileInfo.filename + '-' + tempFileInfo.originalname;
+    fs.rename(tempFileInfo.path, newPath, (err) => {
+        if (err) { throw err;}
+        console.log("File moved to " + newPath);
+    })
+    tempFileInfo.filename += '-' + tempFileInfo.originalname; //append the orginal path
+    tempFileInfo.path = newPath; // Update the fileInfo opject with updated filepath
+}
 
 router.get('/', function(req, res)
 {
@@ -110,11 +142,29 @@ router.post('/upload',
     // At this point multer (uploadFuncs.fields()) has modified the request object
     console.log(req.files) // output the structure of the files object
 
+        //just move 1 file for now - first file
+        //const firstFileInfo = req.files.filetag1[0];
+
+
+    //outer loop through req.files object
+
+        for(const [KEY, fileinfoArray] of Object.entries(req.files))
+        {
+            for(const newImage of fileinfoArray)
+            {
+                moveFile(newImage, __dirname + "/../public/images/")
+            }
+        }
+
+
+
+
     //TODO upload at least 2 files in filetag1 then display the original name of the file
     res.render('upload-files',{
         title: 'POST - Upload example',
         isSubmitted: true,
-        OgName: req.files.filetag1?.[1].originalname,
+        //OgName: req.files.filetag1?.[1].originalname,
+        firstFileInfo: req.files.filetag1[0]
     });
 })
 
