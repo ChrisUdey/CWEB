@@ -164,7 +164,8 @@ router.post('/upload',
         title: 'POST - Upload example',
         isSubmitted: true,
         //OgName: req.files.filetag1?.[1].originalname,
-        firstFileInfo: req.files.filetag1[0]
+        firstFileInfo: req.files.filetag1[0],
+        fileInfo: req.files.filetag1.concat(req.files.filetag2),
     });
 })
 
