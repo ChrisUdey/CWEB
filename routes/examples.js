@@ -145,7 +145,7 @@ router.post('/upload',
         //just move 1 file for now - first file
         //const firstFileInfo = req.files.filetag1[0];
 
-
+    const uploadedFileNames=[];
     //outer loop through req.files object
 
         for(const [KEY, fileinfoArray] of Object.entries(req.files))
@@ -153,6 +153,7 @@ router.post('/upload',
             for(const newImage of fileinfoArray)
             {
                 moveFile(newImage, __dirname + "/../public/images/")
+                uploadedFileNames.push(newImage.filename);
             }
         }
 
@@ -166,6 +167,7 @@ router.post('/upload',
         //OgName: req.files.filetag1?.[1].originalname,
         firstFileInfo: req.files.filetag1[0],
         fileInfo: req.files.filetag1.concat(req.files.filetag2),
+        uploadedFileNames,
     });
 })
 
