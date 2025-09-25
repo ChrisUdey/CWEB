@@ -1,0 +1,74 @@
+<h1> List of Users from API</h1>
+<div class="table-responsive">
+    <table class="table">
+        <thead><tr>
+            <th>ID</th>            <th>Role</th>            <th>HomePage</th>
+        </tr></thead>
+        <tbody><!--USER FROM API GOES HERE --></tbody>
+    </table>
+</div>
+<div class="alert alert-info" role="alert">
+    Loading...
+</div>
+<div class="alert alert-danger d-none" role="alert">
+    Error fetching users from api. See browser console for details.
+</div>
+
+<script>
+    const URL_USER_API = "http://localhost:3000/api/users"
+    const tbody = document.querySelector('tbody');
+    const alertLoading = document.querySelector('.alert-info');
+    const alertError = document.querySelector('.alert-danger');
+
+    const showUsersInTBody = (usersFromAPI) =>{
+        tbody.innerHTML = '' //clear html table body
+        usersFromAPI.forEach( (u) => {
+            tbody.innerHTML += `
+            <tr>
+                <td>${u.id}</td>
+                <td>${u.role}</td>
+                <td>${u.defaultHome}</td>
+            </tr>`
+        })
+    }
+
+    const fetchUsersFromAPI = async() => {
+        // show the loading and hide any errors
+        alertLoading.classList.remove('d-none'); //show loading
+        alertError.classList.add('d-none'); //hide error
+
+
+        const response = await fetch(`${URL_USER_API}`);
+
+        //if error from api - ok mean status code in the 200 range
+        if(!response.ok){
+            // hide the loading and show any errors
+            alertLoading.classList.add('d-none'); //hide loading
+            alertError.classList.remove('d-none'); //show error
+
+            try{
+                const errorFromAPI = await response.json();
+                console.log('API Error', errorFromAPI);
+            }
+            catch (e) {
+                console.log('No Error Data from API')
+            }
+
+        }
+
+        // convert the JSON string into JS array of objects
+        const usersFromAPI = await response.json();
+
+
+        // after fetch returns hide loading
+        alertLoading.classList.add('d-none'); //hide loading
+        showUsersInTBody(usersFromAPI)
+
+    }
+
+    window.onload = function (){
+        fetchUsersFromAPI();
+    }
+
+
+</script>

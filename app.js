@@ -20,6 +20,15 @@ var usersRouter = require('./routes/users');
 const exampleRouter = require('./routes/examples');
 const stateRouter = require('./routes/state');
 const secureRouter = require('./routes/secure');
+
+//declare API routes
+const userAPIRouter = require('./routes/api/user-api');
+
+
+//declare UI routes
+const uiExampleRouter = require('./routes/ui-example');
+
+
 var app = express();
 
 // view engine setup
@@ -42,9 +51,22 @@ app.use('/examples', exampleRouter);
 app.use('/state', stateRouter);
 app.use('/secure', secureRouter)
 
+
+//include the new api routes
+app.use('/api', userAPIRouter);
+
+//include the UI routes
+app.use('/ui',uiExampleRouter);
+
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
-  next(createError(404));
+  if(!req.path.startsWith('/api')) {
+    return next(createError(404)); //error in html format
+  }
+  const err = new Error('Not Found');
+  err.status = 404;
+  return next(err);
+
 });
 
 // error handler
@@ -55,7 +77,15 @@ app.use(function(err, req, res, next) {
 
   // render the error page
   res.status(err.status || 500);
-  res.render('error');
+  if(!req.path.startsWith('/api')) {
+    return res.render('error');
+  }
+
+  return res.json({
+    error: err.message,
+    stack: res.locals.error?.stack?.split('\n'),
+  });
+
 });
 
 module.exports = app;

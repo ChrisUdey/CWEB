@@ -36,3 +36,21 @@ exports.findUserByUserInfo = (userInfo)=> {
     );
 };
 
+
+exports.findAllUsers = (filter)=> {
+    let filterUsers = users;
+    if(filter){
+        //very simple additive (||) filter - In the real world you need much more complex filter
+        filterUsers = filterUsers.filter( (u) => u.email === filter.email ||
+        u.role === filter.role ||
+        u.defaultHome === filter.defaultHome);
+    }
+
+    // exclude sensitive information (i.e password)
+    const safeUsers = filterUsers.map( (u) => {
+        //clones the user object, but then "unsets" the password property
+        return {...u, password:undefined}
+    });
+
+    return safeUsers;
+}
