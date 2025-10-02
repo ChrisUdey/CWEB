@@ -64,6 +64,7 @@
         //TODO add inputs for role and email (text box) then build the query string
         queryString+= roleInput.value !== "all" ? `role=${roleInput.value}&` : ""
         queryString+= emailInput.value !== "" ? `email=${emailInput.value}&` : ""
+
         console.log('Query string is :', queryString)
         const response = await fetch(`${URL_USER_API}${queryString}`,{method:"POST"}); //POST request
 

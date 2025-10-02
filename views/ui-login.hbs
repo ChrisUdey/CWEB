@@ -1,1 +1,64 @@
 <h1>Login through API</h1>
+<!--
+ui-login.hbs
+template for GET and POST form examples to an api using JS and fetch
+regular form submit is disabled so JS can make the fetch request instead of the browser default action
+-->
+
+<form onsubmit="return false;">
+    <h1>FETCH A TOKEN</h1>
+    <div class="mb-2">
+        <label class="form-label" for="email">Email address:</label>
+        <input type="email" class="form-control" value="admin@t.ca"
+               placeholder="Enter email" id="email" >
+        <div id="" class="invalid-feedback"> Credentials not recognized </div>
+    </div>
+    <div class="mb-2">
+        <label class="form-label" for="pwd">Password:</label>
+        <input type="text" class="form-control" value="123456Pw"
+               placeholder="Enter password" id="pwd">
+        <div class="invalid-feedback"> Credentials not recognized </div>
+    </div>
+    <button type="button" class="btn btn-primary" onclick="fetchLogin()">Fetch GET</button>
+    <button type="button" class="btn btn-warning" onclick="fetchLogin('POST')">Fetch POST</button>
+</form>
+<div class="alert alert-success d-none" role="alert">
+    You have successfully authenticated!
+</div>
+<div class="card p-2">
+    <h2>Session Storage DEBUG</h2>
+    <div id="sessionDisplay">
+
+    </div>
+</div>
+<script>
+    const URL_LOGIN_API = 'http://localhost:3000/api/login'
+    const emailInput = document.getElementById('email')
+    const passwordInput = document.getElementById('pwd')
+
+    const fetchLogin = async (method)=>{
+        const response = await fetch(`${URL_LOGIN_API}/?email=${emailInput.value}&pwd=${passwordInput.value}`)
+
+        //parsing the JSON string from the api in a javascript Objects/arrays
+        const dataFromAPI = await response.json()
+
+        // store the token in the browser's session storage
+        sessionStorage.setItem("token",dataFromAPI.token)
+
+        //LATER in another page we can get the token from the browser session
+        /*EXAMPLE:
+
+        fetch(`${SOME_URL}, {
+            method: 'POST',
+            headers: {
+                "Authorization": `Bearer ${sessionStorage("token")}`
+            }
+        }}
+
+         */
+
+
+
+    }
+
+</script>
