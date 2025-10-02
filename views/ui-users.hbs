@@ -1,4 +1,21 @@
 <h1> List of Users from API</h1>
+<form onsubmit="return false;"> <!-- prevent submission -->
+    <select id="roleInput">
+        <option value="all">All Roles</option>
+        <option value="admin">Admin</option>
+        <option value="employee">Employee</option>
+        <option value="client">Client</option>
+    </select>
+    <select id="homeInput">
+        <option value="all">All Home Pages</option>
+        <option value="dashboard">Admin Dashboard</option>
+        <option value="profile">Employee Profile</option>
+        <option value="booking">Client Booking</option>
+    </select>
+    <label for="emailInput">Email Filter</label>
+    <input id="emailInput" type="email"/>
+    <button type="button" onclick="fetchUsersFromAPI()">Apply Filter</button>
+</form>
 <div class="table-responsive">
     <table class="table">
         <thead><tr>
@@ -19,6 +36,9 @@
     const tbody = document.querySelector('tbody');
     const alertLoading = document.querySelector('.alert-info');
     const alertError = document.querySelector('.alert-danger');
+    const homeInput = document.getElementById('homeInput');
+    const emailInput = document.getElementById('emailInput');
+    const roleInput = document.getElementById('roleInput');
 
     const showUsersInTBody = (usersFromAPI) =>{
         tbody.innerHTML = '' //clear html table body
@@ -37,8 +57,12 @@
         alertLoading.classList.remove('d-none'); //show loading
         alertError.classList.add('d-none'); //hide error
 
+        let queryString = '/?';
+        queryString += homeInput.value === 'all' ? '' : `defaultHome=${homeInput.value}&`;
+        queryString += emailInput.value === '' ? '' : `email=${emailInput.value}&`;
+        queryString += roleInput.value === 'all' ? '' : `role=${roleInput.value}&`;
 
-        const response = await fetch(`${URL_USER_API}`);
+        const response = await fetch(`${URL_USER_API}${queryString}`);  //GET request
 
         //if error from api - ok mean status code in the 200 range
         if(!response.ok){

@@ -14,6 +14,8 @@ exports.generateJWT = (payload)=> {
 exports.authenticateJWT = (req, res,next) => {
     const token = req.query.access_token || req.cookies['access_token'];
 
+    // add logic / code to check the req.headers.authorization for token
+
     if(!token){
         // avoid ugly error - let later middleware redirect nicely instead
         if(FRIENDLY_AUTHORIZE) return next()
