@@ -4,7 +4,11 @@ const router = express.Router()
 const {findAllUsers,findUserByUserInfo} = require('../../controllers/user-controller')
 
 router.get('/users', (req, res) => {
-    const users = findAllUsers();
+    let filter = null // no filter - bring back all users
+    if(req.query && Object.keys(req.query).length > 0){
+        filter = req.query;
+    }
+    const users = findAllUsers(filter);
     if(users.length) {
         return res.status(200).json(users);
     }

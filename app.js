@@ -15,6 +15,16 @@ const sessOptions = {
   store: new SQLiteStore({ db: 'sessions.db'}),
 };
 
+const cors = require('cors');
+const corsOptions = {
+  origin:/localhost:\d{4,5}/i, //Allow requests from localhost on any 4 or 5 digit
+  methods: 'GET,PUT,POST,DELETE,OPTIONS',
+  credentials: true, //allows cookies over fetch
+  allowedHeaders: 'Origin, X-Requested-With, Content-Type, Accept, Authorization',
+  maxAge: 43200, // max time of check
+}
+
+
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 const exampleRouter = require('./routes/examples');
@@ -42,7 +52,8 @@ app.use(cookieParser(sessOptions.secret));
 app.use(express.static(path.join(__dirname, 'public')));
 app.use('/bw', express.static(path.join(__dirname, 'node_modules/bootswatch/dist')));
 app.use(session(sessOptions))
-
+app.use('/api',cors(corsOptions)) //Add CORs headers to response automatically
+app.options('*', cors(corsOptions)) //always allow option request for pre-flight checks
 
 //This is like a switch statement that pivots on the url
 app.use('/', indexRouter);

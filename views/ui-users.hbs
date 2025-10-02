@@ -1,4 +1,22 @@
 <h1> List of Users from API</h1>
+<!--prevent browser from submitting the form -we are using fetch instead -->
+<form onsubmit="return false;">
+    <select id="homeInput">
+        <option value="all">All Home Pages</option>
+        <option value="dashboard">Admin Dash Board</option>
+        <option value="profile">Employee Profile</option>
+        <option value="booking">Client Booking</option>
+    </select>
+    <select id="roleInput">
+        <option value="all">All Roles</option>
+        <option value="admin">Admin</option>
+        <option value="employee">Employee</option>
+        <option value="client">Client</option>
+    </select>
+    <input id="emailInput" type="email"/>
+    <button type="button" onclick="fetchUsersFromAPI();">Apply filter</button>
+
+</form>
 <div class="table-responsive">
     <table class="table">
         <thead><tr>
@@ -19,7 +37,9 @@
     const tbody = document.querySelector('tbody');
     const alertLoading = document.querySelector('.alert-info');
     const alertError = document.querySelector('.alert-danger');
-
+    const homeInput = document.getElementById('homeInput')
+    const roleInput = document.getElementById('roleInput')
+    const emailInput = document.getElementById('emailInput')
     const showUsersInTBody = (usersFromAPI) =>{
         tbody.innerHTML = '' //clear html table body
         usersFromAPI.forEach( (u) => {
@@ -37,8 +57,15 @@
         alertLoading.classList.remove('d-none'); //show loading
         alertError.classList.add('d-none'); //hide error
 
+        let queryString = '/?'
+        //if all is the value then DO NOT append the following query string
 
-        const response = await fetch(`${URL_USER_API}`);
+        queryString+= homeInput.value !== "all" ? `defaultHome=${homeInput.value}&` : ""
+        //TODO add inputs for role and email (text box) then build the query string
+        queryString+= roleInput.value !== "all" ? `role=${roleInput.value}&` : ""
+        queryString+= emailInput.value !== "" ? `email=${emailInput.value}&` : ""
+        console.log('Query string is :', queryString)
+        const response = await fetch(`${URL_USER_API}${queryString}`,{method:"POST"}); //POST request
 
         //if error from api - ok mean status code in the 200 range
         if(!response.ok){
