@@ -2,8 +2,15 @@ const express = require('express')
 const router = express.Router()
 
 const {findAllUsers,findUserByUserInfo} = require('../../controllers/user-controller')
+const {authenticateJWT, authorizeAdmin} = require("../../middleware/auth-middleware");
 
-router.get('/users', (req, res) => {
+
+//We want to secure the users list so only admin can access this handler
+router.get('/users',
+    authenticateJWT,
+    //add more middle to only allow ADMIN users
+    authorizeAdmin,
+    (req, res) => {
     let filter = null // no filter - bring back all users
     if(req.query && Object.keys(req.query).length > 0){
         filter = req.query;

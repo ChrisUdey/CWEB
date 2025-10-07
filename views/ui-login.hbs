@@ -37,7 +37,26 @@ regular form submit is disabled so JS can make the fetch request instead of the 
     const passwordInput = document.getElementById('pwd')
 
     const fetchLogin = async (method)=>{
-        const response = await fetch(`${URL_LOGIN_API}/?email=${emailInput.value}&pwd=${passwordInput.value}`)
+        let response;
+
+        if(method === "POST") {
+            response = await fetch(URL_LOGIN_API, {
+                method: 'POST',
+                body: JSON.stringify({
+                    email: emailInput.value,
+                    pwd: passwordInput.value,
+                }),
+                headers:{ // tell server we are sending JSON string (not a JS object)
+                    'Content-Type': 'application/json'
+                }
+            });
+
+        } else {
+            //do get request - default for fetch call
+            response = await fetch(`${URL_LOGIN_API}/?email=${emailInput.value}&pwd=${passwordInput.value}`)
+        }
+
+
 
         //parsing the JSON string from the api in a javascript Objects/arrays
         const dataFromAPI = await response.json()

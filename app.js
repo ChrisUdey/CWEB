@@ -33,7 +33,7 @@ const secureRouter = require('./routes/secure');
 
 //declare API routes
 const userAPIRouter = require('./routes/api/user-api');
-
+const secureAPIRouter = require('./routes/api/secure-api');
 
 //declare UI routes
 const uiExampleRouter = require('./routes/ui-example');
@@ -65,6 +65,7 @@ app.use('/secure', secureRouter)
 
 //include the new api routes
 app.use('/api', userAPIRouter);
+app.use('/api', secureAPIRouter);
 
 //include the UI routes
 app.use('/ui',uiExampleRouter);

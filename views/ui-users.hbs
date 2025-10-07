@@ -66,7 +66,14 @@
         queryString+= emailInput.value !== "" ? `email=${emailInput.value}&` : ""
 
         console.log('Query string is :', queryString)
-        const response = await fetch(`${URL_USER_API}${queryString}`,{method:"POST"}); //POST request
+        //Send token from session storage along with this request
+        //currently our filter functionality would break if we add the token to the query string
+        const response = await fetch(`${URL_USER_API}${queryString}`, {
+            headers:{
+                // standard Bearer token in the Authorization header
+                'Authorization': `Bearer ${sessionStorage.getItem('token')}`
+            }
+        }); //POST request
 
         //if error from api - ok mean status code in the 200 range
         if(!response.ok){

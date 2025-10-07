@@ -12,8 +12,11 @@ exports.generateJWT = (payload)=> {
 }
 
 exports.authenticateJWT = (req, res,next) => {
-    const token = req.query.access_token || req.cookies['access_token'];
+    let token = req.query.access_token || req.cookies['access_token'];
     //ADD code to also check the req.headers.authorization for the token
+    if(req.headers?.authorization?.startsWith('Bearer ')){
+        token = req.headers.authorization.split(  ' ')[1]
+    }
 
     if(!token){
         // avoid ugly error - let later middleware redirect nicely instead
@@ -41,7 +44,6 @@ exports.authenticateJWT = (req, res,next) => {
             //Avoided all pitfalls so we good - store user and jwt in request for later middleware
             req.user = user;
             req.jwt = token;
-
             next();
             console.log('User'.user)
         })
@@ -61,4 +63,23 @@ exports.authorizeUser = (req, res, next) => {
     }
 
     next() // go to next function in list
+}
+
+exports.authorizeAdmin = (req, res, next) => {
+
+
+    //if user is not admin generate error and return
+    req.currentScope = req.path.replace(/^\/+|\/+$/g, '');
+    if(req.user.role !== 'admin')
+    {
+            const err = new Error('No user found');
+            err.status = 404; //indicates not found
+            return next(err); //show ugly error
+
+    }
+
+    //if user is admin call the next function in the chain
+    next();
+
+
 }
