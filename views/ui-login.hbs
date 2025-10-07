@@ -32,7 +32,26 @@
     const emailInput = document.getElementById('email');
 
     const fetchLogin = async (method) => {
-        const response = await fetch(`${URL_LOGIN_API}/?email=${emailInput.value}&pwd=${passInput.value}`);
+        let response;
+
+        if (method === 'POST')
+        {
+            response = await fetch(URL_LOGIN_API, {
+                method: 'POST',
+                body: JSON.stringify({
+                    email: emailInput.value,
+                    pwd: passInput.value
+                }),
+                headers: {      //tell server we are sending json
+                    'Content-Type' : 'application/json'
+                }
+            });
+        }
+        else
+        {
+            response = await fetch(`${URL_LOGIN_API}/?email=${emailInput.value}&pwd=${passInput.value}`);
+        }
+
         // parsing JSON string from API into JS objects
         const dataFromAPI = await response.json();
 

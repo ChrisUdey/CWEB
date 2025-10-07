@@ -2,8 +2,12 @@ const express = require('express')
 const router = express.Router()
 
 const {findAllUsers,findUserByUserInfo} = require('../../controllers/user-controller')
+const {authenticateJWT, authorizeUser, authorizeAdmin} = require("../../middleware/auth-middleware");
 
-router.get('/users', (req, res) => {
+router.get('/users',
+    authenticateJWT,
+    authorizeAdmin,
+    (req, res) => {
     let filter = null; //Brings back all
     if (req.query && Object.keys(req.query).length > 0)
     {

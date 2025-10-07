@@ -12,9 +12,13 @@ exports.generateJWT = (payload)=> {
 }
 
 exports.authenticateJWT = (req, res,next) => {
-    const token = req.query.access_token || req.cookies['access_token'];
+    let token = req.query.access_token || req.cookies['access_token'];
 
     // add logic / code to check the req.headers.authorization for token
+    if (req.headers?.authorization?.startsWith('Bearer '))
+    {
+        token = req.headers.authorization.split(' ')[1];
+    }
 
     if(!token){
         // avoid ugly error - let later middleware redirect nicely instead
@@ -62,4 +66,15 @@ exports.authorizeUser = (req, res, next) => {
     }
 
     next() // go to next function in list
+}
+
+exports.authorizeAdmin = (req, res, next) => {
+    if (req.user.role !== 'admin')
+    {
+        const err = new Error('Unauthorized - Only for admin users');
+        err.status = 403; //indicates not found
+        return next(err); //show ugly error
+    }
+
+    return next();
 }

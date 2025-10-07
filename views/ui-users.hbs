@@ -62,7 +62,12 @@
         queryString += emailInput.value === '' ? '' : `email=${emailInput.value}&`;
         queryString += roleInput.value === 'all' ? '' : `role=${roleInput.value}&`;
 
-        const response = await fetch(`${URL_USER_API}${queryString}`);  //GET request
+        const response = await fetch(`${URL_USER_API}${queryString}`,{
+            headers: {
+                // standard bearer token in authorization header
+                'Authorization': `Bearer ${sessionStorage.getItem('token')}`
+            }
+        });  //GET request
 
         //if error from api - ok mean status code in the 200 range
         if(!response.ok){
